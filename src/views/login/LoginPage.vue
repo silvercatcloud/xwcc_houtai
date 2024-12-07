@@ -46,7 +46,7 @@ const register = async () => {
   ElMessage.success(result.msg ? result.msg : '注册成功')
 }
 
-import { useUserStore } from '../../../src/stores/user'
+import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
 
 const useStore = useUserStore()
@@ -55,7 +55,8 @@ const router = useRouter()
 const login = async () => {
   await form.value.validate()
   const res = await userLoginService(registerData.value)
-  useStore.setToken(res.data.token) //!!存token
+  // console.log(res.data.data)
+  useStore.setToken(res.data.data) //!!存token
   ElMessage.success('登录成功')
   router.push('/')
 }
