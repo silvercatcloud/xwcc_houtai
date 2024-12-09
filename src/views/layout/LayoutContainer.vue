@@ -22,7 +22,7 @@ const getUserInfo = async () => {
   let result = await userInfoService()
   //数据存储到pinia中
   userInfoStore.setInfo(result.data.data)
-  // console.log(result.data.data.username)
+  // console.log(result.data.data)
 }
 getUserInfo()
 //条目被点击后,调用的函数
@@ -100,7 +100,10 @@ const handleCommand = (command) => {
     <el-container>
       <el-header>
         <div>
-          操作人员：<strong>{{ userInfoStore.info.username }}</strong>
+          操作人员：
+          <strong>
+            {{ userInfoStore.info.nickname || userInfoStore.info.username }}
+          </strong>
         </div>
         <el-dropdown placement="bottom-end" @command="handleCommand">
           <span class="el-dropdown__box">

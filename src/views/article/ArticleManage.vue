@@ -24,7 +24,7 @@
           <el-link type="primary" :underline="false">{{ row.title }}</el-link>
         </template>
       </el-table-column>
-      <el-table-column label="分类" prop="categoryName"> </el-table-column>
+      <el-table-column label="分类" prop="categoryName"></el-table-column>
       <el-table-column label="发表时间" prop="updateTime">
         <template #default="{ row }">
           {{ formatTime(row.updateTime) }}
@@ -69,6 +69,7 @@
 </template>
     
 <script setup>
+import { Delete, Edit } from '@element-plus/icons-vue'
 import { ref } from 'vue'
 const visibleDrawer = ref(false)
 import ChannelSelect from '@/views/article/components/ChannelSelect.vue'
@@ -82,12 +83,11 @@ ref(false)
 
 const params = ref({
   pageNum: 1,
-  pageSize: 2,
+  pageSize: 10,
   categoryId: '',
 })
 const getArticleList = async () => {
   let res = await articleListService(params.value)
-  // console.log(res.data.data.items)
   articleList.value = res.data.data.items
   total.value = res.data.data.total
 }
@@ -107,7 +107,8 @@ const onDeleteArticle = async (row) => {
     confirmButtonText: '确认',
     cancelButtonText: '取消',
   })
-  await artDeteleService(row.categoryId)
+  await artDeteleService(row.id)
+  // await artDeteleService(row.categoryId)
   ElMessage({ type: 'success', message: '删除成功' })
   await getArticleList()
 }

@@ -29,7 +29,7 @@ instance.interceptors.response.use(
   },
   (err) => {
     ElMessage({ message: err.response.data.message || '服务异常', type: 'error' })
-    console.log(err)
+    // console.log(err)
     // TODO 5. 处理401错误
     //错误的特殊情况   
     if (err.response?.status === 401) {

@@ -3,7 +3,7 @@ import { ref } from 'vue'
 const visibleDrawer = ref(false)
 import ChannelSelect from './ChannelSelect.vue'
 import { artGetDetailService } from '@/api/article'
-import { articleAddService } from '@/api/article'
+import { articleAddService, artEditService } from '@/api/article'
 import { Plus } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { QuillEditor } from '@vueup/vue-quill'
@@ -31,24 +31,27 @@ const open = async (row) => {
   if (row.id) {
     const res = await artGetDetailService(row.id)
     formModel.value = res.data.data
+    // console.log(formModel.value.categoryName)
   } else {
     formModel.value = { ...defaultForm }
     editorRef.value.setHTML('')
   }
 }
+
 //导入token
 import { useUserStore } from '@/stores/user.js'
 const tokenStore = useUserStore()
 const uploadSuccess = (result) => {
-  console.log(result)
   formModel.value.coverImg = result.data
-  console.log('Upload response data:', result.data)
 }
 const emit = defineEmits(['success'])
 const onPublish = async (state) => {
   formModel.value.state = state
   if (formModel.value.id) {
-    console.log('编辑操作')
+    await artEditService(formModel.value)
+    ElMessage.success('编辑成功')
+    visibleDrawer.value = false
+    emit('success', 'edit')
   } else {
     // 添加请求
     await articleAddService(formModel.value)
@@ -57,6 +60,7 @@ const onPublish = async (state) => {
     emit('success', 'add')
   }
 }
+
 defineExpose({
   open,
 })
@@ -74,7 +78,7 @@ defineExpose({
         <el-input v-model="formModel.title" placeholder="请输入标题"></el-input>
       </el-form-item>
       <el-form-item label="文章分类" prop="categoryId">
-        <channel-select v-model="formModel.categoryId" width="100%"> </channel-select>
+        <channel-select v-model="formModel.categoryId" width="100%"></channel-select>
       </el-form-item>
       <el-form-item label="文章封面" prop="coverImg">
         <el-upload

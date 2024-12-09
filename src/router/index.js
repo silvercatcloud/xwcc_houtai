@@ -8,7 +8,7 @@ const router = createRouter({
     {
       path:'/',
       component:()=>import('@/views/layout/LayoutContainer.vue'),//布局架子
-      // redirect:'/article/manage',//重定向
+      redirect:'/article/manage',//重定向
       children:[
         {path:'/article/manage',component:()=>import('@/views/article/ArticleManage.vue')},//文章管理
         {path:'/article/channel',component:()=>import('@/views/article/ArticleChannel.vue')},//频道管理

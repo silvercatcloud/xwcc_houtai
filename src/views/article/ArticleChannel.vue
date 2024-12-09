@@ -48,7 +48,7 @@ const getChannelList = async () => {
   const res = await articleCategoryListService()
   channelList.value = res.data.data
   loading.value = false
-  console.log(channelList.value)
+  // console.log(channelList.value)
 }
 getChannelList()
 const onEditChannel = (row) => {

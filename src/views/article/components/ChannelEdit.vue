@@ -30,7 +30,7 @@ const rules = {
 const fromRef = ref()
 const emit = defineEmits(['success'])
 const onSubmit = async () => {
-  console.log(fromModel.value)
+  // console.log(fromModel.value)
   await fromRef.value.validate()
   fromModel.value.id //通过 id（存在，修改，不存在，添加 ）判断
     ? await articleCategoryUpdateService(fromModel.value)
@@ -43,7 +43,7 @@ const onSubmit = async () => {
   emit('success')
 }
 const open = (row) => {
-  console.log(row)
+  // console.log(row)
   dialogVisible.value = true
   fromModel.value = { ...row }
 }

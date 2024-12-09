@@ -24,6 +24,7 @@ const channelList = ref([])
 const getChannelList = async () => {
   const res = await articleCategoryListService()
   channelList.value = res.data.data
+  // console.log(channelList.value[0].categoryName)
 }
 getChannelList()
 </script>
