@@ -22,14 +22,28 @@ export const articleCategoryUpdateService = (categoryData)=>{
 export const articleCategoryDeleteService = (id)=>{
     return request.delete('/category?id='+id)
 }
-
+/*******************************************************************/
+/*******************************************************************/
+/*******************************************************************/
+/*******************************************************************/
 //文章列表查询
-export const articleListService = (params)=>{
-   return  request.get('/article',{params:params})
-}
-
+export const articleListService = (params) =>
+  request.get('/article', {
+    params
+  })
 //文章添加
 export const articleAddService = (articleData)=>{
     return request.post('/article',articleData);
-
 }
+//获取文章详情
+export const artGetDetailService = (id) =>
+  request.get('/article/detail', { params: { id } })
+
+//文章修改
+export const artEditService = (articleData)=>{
+    return request.put('/article',articleData);
+}
+//文章删除
+export const artDeteleService = (id)=>{
+    return request.delete('/article?id='+id)
+ }

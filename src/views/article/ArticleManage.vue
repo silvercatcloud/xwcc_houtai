@@ -1,7 +1,7 @@
 <template>
   <page-container title="文章管理">
     <template #extra>
-      <el-button type="primary">发布文章</el-button>
+      <el-button type="primary" @click="onAddArticle">发布文章</el-button>
     </template>
     <el-form inline>
       <el-form-item label="文章分类：" style="width: 20%">
@@ -24,9 +24,7 @@
           <el-link type="primary" :underline="false">{{ row.title }}</el-link>
         </template>
       </el-table-column>
-      <el-table-column label="分类" prop="categoryName">
-        <!-- {{ row.categoryId }} -->
-      </el-table-column>
+      <el-table-column label="分类" prop="categoryName"> </el-table-column>
       <el-table-column label="发表时间" prop="updateTime">
         <template #default="{ row }">
           {{ formatTime(row.updateTime) }}
@@ -71,10 +69,12 @@
 </template>
     
 <script setup>
-import { Delete, Edit } from '@element-plus/icons-vue'
 import { ref } from 'vue'
-import ChannelSelect from './components/ChannelSelect.vue'
-import { articleListService } from '@/api/article.js'
+const visibleDrawer = ref(false)
+import ChannelSelect from '@/views/article/components/ChannelSelect.vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { articleListService, artDeteleService } from '@/api/article.js'
+import ArticleEdit from '@/views/article/components/ArticleEdit.vue'
 import { formatTime } from '@/utils/format'
 const articleList = ref([])
 const total = ref(0)
@@ -83,12 +83,11 @@ ref(false)
 const params = ref({
   pageNum: 1,
   pageSize: 2,
-  // categoryId: '',
+  categoryId: '',
 })
 const getArticleList = async () => {
   let res = await articleListService(params.value)
-
-  console.log(res.data.data.items)
+  // console.log(res.data.data.items)
   articleList.value = res.data.data.items
   total.value = res.data.data.total
 }
@@ -99,18 +98,36 @@ const onSizeChange = (size) => {
   getArticleList()
 }
 const onCurrentChange = (page) => {
-  params.value.pagenum = page
+  params.value.pageNum = page
   getArticleList()
 }
+const onDeleteArticle = async (row) => {
+  await ElMessageBox.confirm('你确认删除该文章信息吗？', '温馨提示', {
+    type: 'warning',
+    confirmButtonText: '确认',
+    cancelButtonText: '取消',
+  })
+  await artDeteleService(row.categoryId)
+  ElMessage({ type: 'success', message: '删除成功' })
+  await getArticleList()
+}
+const articleEditRef = ref()
+const onAddArticle = () => {
+  visibleDrawer.value = true
+  articleEditRef.value.open({})
+}
 const onEditArticle = (row) => {
-  console.log(row)
+  articleEditRef.value.open(row)
 }
-const onDeleteArticle = (row) => {
-  console.log(row)
+// 添加修改成功
+const onSuccess = (type) => {
+  if (type === 'add') {
+    // 如果是添加，需要跳转渲染最后一页，编辑直接渲染当前页
+    const lastPage = Math.ceil((total.value + 1) / params.value.pageSize)
+    params.value.pageNum = lastPage
+  }
+  getArticleList()
 }
-// const onAddArticle = () => {
-//   articleEditRef.value.open({})
-// }
 </script>
     
 <style lang="scss" scoped>

@@ -1,107 +1,66 @@
 <script setup>
 import { ref } from 'vue'
-import ChannelSelect from '@/views/article/components/ChannelSelect.vue'
+const visibleDrawer = ref(false)
+import ChannelSelect from './ChannelSelect.vue'
+import { artGetDetailService } from '@/api/article'
+import { articleAddService } from '@/api/article'
 import { Plus } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import { artEditService, artGetDetailService, articleAddService } from '@/api/article.js'
-import axios from 'axios'
-import { ElMessage } from 'element-plus'
-import { baseURL } from '@/utils/request.js'
-
-const visibleDrawer = ref(false)
-const editorRef = ref()
-const formRef = ref()
-
 const defaultForm = ref({
   title: '',
-  cate_id: '',
-  cover_img: '',
+  categoryId: '',
+  categoryName: '',
+  coverImg: '',
   content: '',
   state: '',
 })
-
+// const formModel = { ...defaultForm }//!!!!!!!!!!!!!!!!!!!!!!!!
 const formModel = ref({
   title: '',
-  cate_id: '',
-  cover_img: '',
+  categoryId: '',
+  categoryName: '',
+  coverImg: '',
   content: '',
   state: '',
 })
-
-const imgUrl = ref('')
-// 发布文章
-const emit = defineEmits(['success'])
-const onUploadFile = (uploadFile) => {
-  imgUrl.value = URL.createObjectURL(uploadFile.raw)
-  formModel.value.cover_img = uploadFile.raw
-}
-
-const onPublish = async (state) => {
-  // 将已发布还是草稿状态，存入 state
-  formModel.value.state = state
-
-  // 转换 formData 数据
-  const fd = new FormData()
-  for (let key in formModel.value) {
-    fd.append(key, formModel.value[key])
-  }
-
-  if (formModel.value.id) {
-    await artEditService(fd)
-    ElMessage.success('修改成功')
-    visibleDrawer.value = false
-    emit('success', 'edit')
-  } else {
-    // 添加请求
-    await articleAddService(fd)
-    ElMessage.success('添加成功')
-    visibleDrawer.value = false
-    emit('success', 'add')
-  }
-}
+const editorRef = ref()
 const open = async (row) => {
   visibleDrawer.value = true
   if (row.id) {
     const res = await artGetDetailService(row.id)
     formModel.value = res.data.data
-    imgUrl.value = baseURL + formModel.value.cover_img
-    // 提交给后台，需要的是 file 格式的，将网络图片，转成 file 格式
-    // 网络图片转成 file 对象, 需要转换一下
-    formModel.value.cover_img = await imageUrlToFile(imgUrl.value, formModel.value.cover_img)
-    console.log('编辑回显')
   } else {
     formModel.value = { ...defaultForm }
-    imgUrl.value = ''
     editorRef.value.setHTML('')
   }
 }
-// 将网络图片地址转换为File对象
-async function imageUrlToFile(url, fileName) {
-  try {
-    // 第一步：使用axios获取网络图片数据
-    const response = await axios.get(url, { responseType: 'arraybuffer' })
-    const imageData = response.data
-
-    // 第二步：将图片数据转换为Blob对象
-    const blob = new Blob([imageData], {
-      type: response.headers['content-type'],
-    })
-
-    // 第三步：创建一个新的File对象
-    const file = new File([blob], fileName, { type: blob.type })
-
-    return file
-  } catch (error) {
-    console.error('将图片转换为File对象时发生错误:', error)
-    throw error
+//导入token
+import { useUserStore } from '@/stores/user.js'
+const tokenStore = useUserStore()
+const uploadSuccess = (result) => {
+  console.log(result)
+  formModel.value.coverImg = result.data
+  console.log('Upload response data:', result.data)
+}
+const emit = defineEmits(['success'])
+const onPublish = async (state) => {
+  formModel.value.state = state
+  if (formModel.value.id) {
+    console.log('编辑操作')
+  } else {
+    // 添加请求
+    await articleAddService(formModel.value)
+    ElMessage.success('添加成功')
+    visibleDrawer.value = false
+    emit('success', 'add')
   }
 }
 defineExpose({
   open,
 })
 </script>
-
 <template>
   <el-drawer
     v-model="visibleDrawer"
@@ -114,17 +73,20 @@ defineExpose({
       <el-form-item label="文章标题" prop="title">
         <el-input v-model="formModel.title" placeholder="请输入标题"></el-input>
       </el-form-item>
-      <el-form-item label="文章分类" prop="cate_id">
-        <channel-select v-model="formModel.cate_id" width="100%"></channel-select>
+      <el-form-item label="文章分类" prop="categoryId">
+        <channel-select v-model="formModel.categoryId" width="100%"> </channel-select>
       </el-form-item>
-      <el-form-item label="文章封面" prop="cover_img">
+      <el-form-item label="文章封面" prop="coverImg">
         <el-upload
           class="avatar-uploader"
-          :auto-upload="false"
+          :auto-upload="true"
           :show-file-list="false"
-          :on-change="onUploadFile"
+          action="/api/upload"
+          name="file"
+          :headers="{ Authorization: tokenStore.token }"
+          :on-success="uploadSuccess"
         >
-          <img v-if="imgUrl" :src="imgUrl" class="avatar" />
+          <img v-if="formModel.coverImg" :src="formModel.coverImg" class="avatar" />
           <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
         </el-upload>
       </el-form-item>
@@ -146,6 +108,8 @@ defineExpose({
     </el-form>
   </el-drawer>
 </template>
+
+ 
 <style lang="scss" scoped>
 .avatar-uploader {
   :deep() {

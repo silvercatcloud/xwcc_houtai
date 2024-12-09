@@ -4,7 +4,7 @@
       v-for="channel in channelList"
       :key="channel.id"
       :label="channel.categoryName"
-      :value="channel.categoryName"
+      :value="channel.id"
     ></el-option>
   </el-select>
 </template>
