@@ -165,8 +165,10 @@ watch(isRegister, () => {
   height: 100vh;
   background-color: #fff;
   .bg {
-    background: url('@/assets/images/cat.png') no-repeat 50% center / 60px auto,
-      url('@/assets/images/01bj.png') no-repeat center / cover;
+    background: url('https://xinwencaochang.oss-cn-beijing.aliyuncs.com/d8615724-8077-4532-89cc-098832fe6373.png') no-repeat 50%
+    center / 60px auto,
+      url('https://xinwencaochang.oss-cn-beijing.aliyuncs.com/PixPin_2024-02-17_15-13-10.png')
+        no-repeat center / cover;
     border-radius: 0 10px 10px 0;
   }
   .form {

@@ -9,7 +9,6 @@ import {
   SwitchButton,
   CaretBottom,
 } from '@element-plus/icons-vue'
-import avatar from '@/assets/images/cat.png'
 import { userInfoService } from '@/api/user.js'
 import { useUserStore } from '@/stores/user.js'
 import useUserInfoStore from '@/stores/userInfo.js'
@@ -136,7 +135,8 @@ const handleCommand = (command) => {
     background: linear-gradient(to bottom, #010f4b, #5698bc);
     &__logo {
       height: 120px;
-      background: url('@/assets/images/spacecat.png') no-repeat center / 120px auto;
+      background: url('https://xinwencaochang.oss-cn-beijing.aliyuncs.com/spacecat.png') no-repeat
+        center / 120px auto;
     }
     .el-menu {
       border-right: none;

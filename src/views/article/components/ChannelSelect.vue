@@ -27,6 +27,7 @@ const getChannelList = async () => {
   // console.log(channelList.value[0].categoryName)
 }
 getChannelList()
+
 </script>
 
 <style lang="scss" scoped>

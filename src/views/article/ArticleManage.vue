@@ -8,14 +8,14 @@
         <channel-select v-model="params.categoryId"></channel-select>
       </el-form-item>
       <el-form-item label="发布状态：" style="width: 20%">
-        <el-select>
+        <el-select v-model="params.state">
           <el-option label="已发布" value="已发布"></el-option>
           <el-option label="草稿" value="草稿"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary">搜索</el-button>
-        <el-button>重置</el-button>
+        <el-button @click="onSearch" type="primary">搜索</el-button>
+        <el-button @click="onReset">重置</el-button>
       </el-form-item>
     </el-form>
     <el-table :data="articleList" style="width: 100%">
@@ -71,7 +71,7 @@
 <script setup>
 import { Delete, Edit } from '@element-plus/icons-vue'
 import { ref } from 'vue'
-const visibleDrawer = ref(false)
+const visibilityBinding = ref(false)
 import ChannelSelect from '@/views/article/components/ChannelSelect.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { articleListService, artDeteleService } from '@/api/article.js'
@@ -80,14 +80,21 @@ import { formatTime } from '@/utils/format'
 const articleList = ref([])
 const total = ref(0)
 ref(false)
-
 const params = ref({
   pageNum: 1,
   pageSize: 10,
   categoryId: '',
+  state: '',
 })
 const getArticleList = async () => {
-  let res = await articleListService(params.value)
+  // 克隆并清理参数
+  const queryParams = { ...params.value }
+  // 如果 `categoryId` 或 `state` 是空字符串，移除它们
+  if (!queryParams.categoryId) delete queryParams.categoryId
+  if (!queryParams.state) delete queryParams.state
+  // 调用接口
+  const res = await articleListService(queryParams)
+  // 渲染视图
   articleList.value = res.data.data.items
   total.value = res.data.data.total
 }
@@ -112,9 +119,10 @@ const onDeleteArticle = async (row) => {
   ElMessage({ type: 'success', message: '删除成功' })
   await getArticleList()
 }
+
 const articleEditRef = ref()
 const onAddArticle = () => {
-  visibleDrawer.value = true
+  visibilityBinding.value = true
   articleEditRef.value.open({})
 }
 const onEditArticle = (row) => {
@@ -127,6 +135,16 @@ const onSuccess = (type) => {
     const lastPage = Math.ceil((total.value + 1) / params.value.pageSize)
     params.value.pageNum = lastPage
   }
+  getArticleList()
+}
+const onSearch = () => {
+  params.value.pageNum = 1
+  getArticleList()
+}
+const onReset = () => {
+  params.value.pageNum = 1
+  params.value.categoryId = ''
+  params.value.state = ''
   getArticleList()
 }
 </script>

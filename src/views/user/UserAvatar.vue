@@ -42,7 +42,7 @@ const updateAvatar = async () => {
           :on-success="uploadSuccess"
         >
           <img v-if="imgUrl" :src="imgUrl" class="avatar" />
-          <img v-else src="@/assets/images/cat.png" width="278" />
+          <img v-else src="https://xinwencaochang.oss-cn-beijing.aliyuncs.com/fe3e0a54-14fd-465f-9720-744080da89e3.png" width="278" />
           <!-- <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon> -->
         </el-upload>
         <br />

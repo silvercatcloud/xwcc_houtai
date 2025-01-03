@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-const visibleDrawer = ref(false)
+const visibilityBinding = ref(false)
 import ChannelSelect from './ChannelSelect.vue'
 import { artGetDetailService } from '@/api/article'
 import { articleAddService, artEditService } from '@/api/article'
@@ -27,14 +27,14 @@ const formModel = ref({
 })
 const editorRef = ref()
 const open = async (row) => {
-  visibleDrawer.value = true
+  visibilityBinding.value = true
   if (row.id) {
     const res = await artGetDetailService(row.id)
     formModel.value = res.data.data
     // console.log(formModel.value.categoryName)
   } else {
     formModel.value = { ...defaultForm }
-    editorRef.value.setHTML('')
+    // editorRef.value.setHTML('')
   }
 }
 
@@ -50,13 +50,13 @@ const onPublish = async (state) => {
   if (formModel.value.id) {
     await artEditService(formModel.value)
     ElMessage.success('编辑成功')
-    visibleDrawer.value = false
+    visibilityBinding.value = false
     emit('success', 'edit')
   } else {
     // 添加请求
     await articleAddService(formModel.value)
     ElMessage.success('添加成功')
-    visibleDrawer.value = false
+    visibilityBinding.value = false
     emit('success', 'add')
   }
 }
@@ -67,7 +67,7 @@ defineExpose({
 </script>
 <template>
   <el-drawer
-    v-model="visibleDrawer"
+    v-model="visibilityBinding"
     :title="formModel.id ? '编辑文章' : '添加文章'"
     direction="rtl"
     size="50%"
