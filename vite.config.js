@@ -40,7 +40,7 @@ export default defineConfig(({ command, mode }) => {
     server: {
       proxy: {
         '/api': {
-          target: 'http://localhost:1024',
+          target: 'http://47.98.247.83:1024',
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, ''),
         },
