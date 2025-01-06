@@ -160,13 +160,14 @@ watch(isRegister, () => {
   </el-row>
 </template>
 
+
 <style lang="scss" scoped>
 .login-page {
   height: 100vh;
   background-color: #fff;
   .bg {
-    background: url('https://xinwencaochang.oss-cn-beijing.aliyuncs.com/d8615724-8077-4532-89cc-098832fe6373.png') no-repeat 50%
-    center / 60px auto,
+    background: url('https://xinwencaochang.oss-cn-beijing.aliyuncs.com/d8615724-8077-4532-89cc-098832fe6373.png')
+        no-repeat 50% center / 60px auto,
       url('https://xinwencaochang.oss-cn-beijing.aliyuncs.com/PixPin_2024-02-17_15-13-10.png')
         no-repeat center / cover;
     border-radius: 0 10px 10px 0;
@@ -176,12 +177,15 @@ watch(isRegister, () => {
     flex-direction: column;
     justify-content: center;
     user-select: none;
+
     .title {
       margin: 0 auto;
     }
+
     .button {
       width: 100%;
     }
+
     .flex {
       width: 100%;
       display: flex;
@@ -189,4 +193,57 @@ watch(isRegister, () => {
     }
   }
 }
+  // 添加响应式媒体查询
+  @media (max-width: 768px) {
+    .login-page {
+    background: url('https://xinwencaochang.oss-cn-beijing.aliyuncs.com/PixPin_2024-02-17_15-13-10.png') no-repeat center center;
+    background-size: cover;
+    }
+    .bg {
+      display: none; // 隐藏背景图片区域
+    }
+
+    .form {
+      margin: 50px auto;
+      padding: 40px;
+      width: 100%;
+      max-width: 90%;
+      min-width: 50%;
+    }
+  }
+  // 当设备宽度小于或等于 480px 时
+  @media (max-width: 480px) {
+    .form {
+      max-width: 90%;//最大宽度不能超过父容器宽度的 90%
+      min-width: 200px;//最小宽度为父容器宽度的 200px。当 max-width 和 min-width 发生冲突时（例如父容器的宽度小到 90% 的宽度低于 min-width），min-width 才会生效。
+      padding: 20px;
+      margin: 20px auto;
+    }
+    .flex {
+      flex-direction: column;
+      align-items: center;
+
+      .el-checkbox {
+        margin-bottom: 15px;
+      }
+    }
+    .form h1 {
+      font-size: 20px; // 缩小标题字体
+    }
+
+    .button {
+      font-size: 14px; // 调整按钮文字大小
+    }
+
+    .el-form-item {
+      margin-bottom: 15px; // 减少表单项间距
+    }
+    .el-button {
+      min-height: 44px; // 保证按钮点击区域
+    }
+    .el-input {
+      min-height: 44px;
+    }
+  }
+
 </style>

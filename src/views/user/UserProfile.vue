@@ -40,8 +40,8 @@ const updateUserInfo = async () => {
 </script>
 <template>
   <page-container title="基本资料">
-    <el-row>
-      <el-col :span="12">
+    <el-row :gutter="20" justify="center">
+      <el-col :xs="24" :sm="20" :md="16" :lg="12" :xl="10">
         <el-form :model="userInfo" :rules="rules" ref="formRef" label-width="100px" size="large">
           <el-form-item label="登录名称">
             <el-input v-model="userInfo.username" disabled></el-input>

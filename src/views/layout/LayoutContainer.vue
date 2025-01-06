@@ -15,6 +15,29 @@ import useUserInfoStore from '@/stores/userInfo.js'
 
 const useStore = useUserStore()
 const userInfoStore = useUserInfoStore()
+import { ref, onMounted, onUnmounted } from 'vue'
+import { ArrowLeft, ArrowRight } from '@element-plus/icons-vue'
+
+const isCollapsed = ref(false) // 控制侧边栏显示/隐藏
+
+const toggleAside = () => {
+  isCollapsed.value = !isCollapsed.value
+}
+// 检测屏幕宽度
+const handleResize = () => {
+  isCollapsed.value = window.innerWidth < 480
+}
+onMounted(() => { 
+  // 初始化状态
+  handleResize()
+  // 监听窗口大小变化
+  window.addEventListener('resize', handleResize)
+})
+
+onUnmounted(() => {
+  // 移除监听
+  window.removeEventListener('resize', handleResize)
+})
 //调用函数,获取用户详细信息
 const getUserInfo = async () => {
   //调用接口
@@ -59,43 +82,51 @@ const handleCommand = (command) => {
 
 <template>
   <el-container class="layout-container">
-    <el-aside width="200px">
-      <div class="el-aside__logo"></div>
-      <el-menu
-        active-text-color="#ecd452"
-        background-color="##3271ae"
-        :default-active="$route.path"
-        text-color="#fff"
-        router
-      >
-        <el-menu-item index="/article/channel">
-          <el-icon><Management /></el-icon>
-          <span>文章分类</span>
-        </el-menu-item>
-        <el-menu-item index="/article/manage">
-          <el-icon><Promotion /></el-icon>
-          <span>文章管理</span>
-        </el-menu-item>
-        <el-sub-menu index="/user">
-          <template #title>
-            <el-icon><UserFilled /></el-icon>
-            <span>个人中心</span>
-          </template>
-          <el-menu-item index="/user/profile">
-            <el-icon><User /></el-icon>
-            <span>基本资料</span>
+    <!-- 折叠按钮 -->
+    <el-aside :width="isCollapsed ? '0' : '200px'" class="el-aside">
+      <el-aside width="200px">
+        <div class="el-aside__logo"></div>
+        <el-menu
+          active-text-color="#ecd452"
+          background-color="##3271ae"
+          :default-active="$route.path"
+          text-color="#fff"
+          router
+        >
+          <el-menu-item index="/article/channel">
+            <el-icon><Management /></el-icon>
+            <span>文章分类</span>
           </el-menu-item>
-          <el-menu-item index="/user/avatar">
-            <el-icon><Crop /></el-icon>
-            <span>更换头像</span>
+          <el-menu-item index="/article/manage">
+            <el-icon><Promotion /></el-icon>
+            <span>文章管理</span>
           </el-menu-item>
-          <el-menu-item index="/user/password">
-            <el-icon><EditPen /></el-icon>
-            <span>重置密码</span>
-          </el-menu-item>
-        </el-sub-menu>
-      </el-menu>
+          <el-sub-menu index="/user">
+            <template #title>
+              <el-icon><UserFilled /></el-icon>
+              <span>个人中心</span>
+            </template>
+            <el-menu-item index="/user/profile">
+              <el-icon><User /></el-icon>
+              <span>基本资料</span>
+            </el-menu-item>
+            <el-menu-item index="/user/avatar">
+              <el-icon><Crop /></el-icon>
+              <span>更换头像</span>
+            </el-menu-item>
+            <el-menu-item index="/user/password">
+              <el-icon><EditPen /></el-icon>
+              <span>重置密码</span>
+            </el-menu-item>
+          </el-sub-menu>
+        </el-menu>
+      </el-aside>
     </el-aside>
+    <div class="collapse-toggle" @click="toggleAside">
+      <el-icon :size="20">
+        <component :is="isCollapsed ? ArrowRight : ArrowLeft" />
+      </el-icon>
+    </div>
     <el-container>
       <el-header>
         <div>
@@ -140,6 +171,11 @@ const handleCommand = (command) => {
     }
     .el-menu {
       border-right: none;
+    }
+  }
+  .collapse-toggle {
+    .el-icon {
+      margin-top: 20px;
     }
   }
   .el-header {

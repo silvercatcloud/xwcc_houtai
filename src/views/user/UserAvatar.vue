@@ -29,8 +29,8 @@ const updateAvatar = async () => {
 
 <template>
   <page-container title="更换头像">
-    <el-row>
-      <el-col :span="12">
+    <el-row :gutter="20" justify="center">
+      <el-col :xs="24" :sm="20" :md="16" :lg="12" :xl="10">
         <el-upload
           ref="uploadRef"
           class="avatar-uploader"
@@ -42,25 +42,31 @@ const updateAvatar = async () => {
           :on-success="uploadSuccess"
         >
           <img v-if="imgUrl" :src="imgUrl" class="avatar" />
-          <img v-else src="https://xinwencaochang.oss-cn-beijing.aliyuncs.com/fe3e0a54-14fd-465f-9720-744080da89e3.png" width="278" />
-          <!-- <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon> -->
+          <img
+            v-else
+            src="https://xinwencaochang.oss-cn-beijing.aliyuncs.com/fe3e0a54-14fd-465f-9720-744080da89e3.png"
+            width="278"
+          />
         </el-upload>
         <br />
-        <el-button
-          type="primary"
-          :icon="Plus"
-          size="large"
-          @click="uploadRef.$el.querySelector('input').click()"
-        >
-          选择图片
-        </el-button>
-        <el-button type="success" :icon="Upload" size="large" @click="updateAvatar">
-          上传头像
-        </el-button>
+        <div class="anjian">
+          <el-button
+            type="primary"
+            :icon="Plus"
+            size="large"
+            @click="uploadRef.$el.querySelector('input').click()"
+          >
+            选择图片
+          </el-button>
+          <el-button type="success" :icon="Upload" size="large" @click="updateAvatar">
+            上传头像
+          </el-button>
+        </div>
       </el-col>
     </el-row>
   </page-container>
 </template>
+
 
 <style lang="scss" scoped>
 .avatar-uploader {
