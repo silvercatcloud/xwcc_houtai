@@ -17,27 +17,37 @@ instance.interceptors.request.use(
   (err) => Promise.reject(err)
 )
 
+let isFirstLoad = true;
+
 instance.interceptors.response.use(
   (res) => {
-    // TODO 3. 处理业务失败
-    // TODO 4. 摘取核心响应数据
     if (res.data.code === 0) {
-        return res
-      }
-      ElMessage({ message: res.data.message || '服务异常', type: 'error' })//element-plus的提示框
-      return Promise.reject(res.data)
+      return res;
+    }
+
+    if (!isFirstLoad) {
+      ElMessage({ message: res.data.message || '服务异常', type: 'error' });
+    }
+
+    return Promise.reject(res.data);
   },
   (err) => {
-    ElMessage({ message: err.response.data.message || '服务异常', type: 'error' })
-    // console.log(err)
-    // TODO 5. 处理401错误
-    //错误的特殊情况   
+    if (!isFirstLoad) {
+      ElMessage({ message: err.response?.data.message || '服务异常', type: 'error' });
+    }
+
     if (err.response?.status === 401) {
-        router.push('/login')
-      }
-    return Promise.reject(err)
+      router.push('/login');
+    }
+
+    return Promise.reject(err);
   }
-)
+);
+
+// 设置首次加载标记
+setTimeout(() => {
+  isFirstLoad = false;
+}, 3000); // 3秒后解除首次加载限制
 
 export default instance
 export { baseURL }
