@@ -34,7 +34,7 @@ const open = async (row) => {
     // console.log(formModel.value.categoryName)
   } else {
     formModel.value = { ...defaultForm }
-    // editorRef.value.setHTML('')
+    editorRef.value.setHTML('')
   }
 }
 
