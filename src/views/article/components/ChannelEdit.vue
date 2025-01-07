@@ -47,10 +47,10 @@ const open = (row) => {
   dialogVisible.value = true
   fromModel.value = { ...row }
 }
-const dialogWidth = ref('30%')
+const dialogWidth = ref('70%')
 const updateDialogWidth = () => {
   if (window.innerWidth <= 480) dialogWidth.value = '90%'
-  else if (window.innerWidth <= 768)  dialogWidth.value = '50%'
+  else if (window.innerWidth <= 768)  dialogWidth.value = '60%'
   else  dialogWidth.value = '30%'
 }
 window.addEventListener('resize', updateDialogWidth)

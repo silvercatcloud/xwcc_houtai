@@ -8,7 +8,7 @@ const router = createRouter({
     {
       path:'/',
       component:()=>import('@/views/layout/LayoutContainer.vue'),//布局架子
-      redirect:'/article/manage',//重定向
+      redirect:'/article/channel',//重定向
       children:[
         //路由懒加载！
         {path:'/article/manage',component:()=>import('@/views/article/ArticleManage.vue')},//文章管理
@@ -16,6 +16,7 @@ const router = createRouter({
         {path:'/user/profile',component:()=>import('@/views/user/UserProfile.vue')},//个人详情
         {path:'/user/avatar',component:()=>import('@/views/user/UserAvatar.vue')},//更换头像
         {path:'/user/password',component:()=>import('@/views/user/UserPassword.vue')},//重置密码      
+        {path:'/show/data',component:()=>import('@/views/show/ShowData.vue')},//登录&注册
       ]
     },
   ]

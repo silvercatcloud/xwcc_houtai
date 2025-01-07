@@ -119,6 +119,10 @@ const handleCommand = (command) => {
               <span>重置密码</span>
             </el-menu-item>
           </el-sub-menu>
+          <el-menu-item index="/show/data">
+            <el-icon><Promotion /></el-icon>
+            <span>数据展示</span>
+          </el-menu-item>
         </el-menu>
       </el-aside>
     </el-aside>
@@ -154,7 +158,7 @@ const handleCommand = (command) => {
       <el-main>
         <router-view></router-view>
       </el-main>
-      <el-footer>新闻操场后台 ©2024 Created by silvercat</el-footer>
+      <el-footer>博客管理后台 ©2025 Created by silvercat</el-footer>
     </el-container>
   </el-container>
 </template>
