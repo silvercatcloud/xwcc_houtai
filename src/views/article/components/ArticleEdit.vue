@@ -67,9 +67,9 @@ const drawerWidth = ref('40%')
 const updateDrawerWidth = () => {
   if (window.innerWidth <= 480) {
     drawerWidth.value = '100%' // 小屏幕时让抽屉宽度更宽
-  }else if (window.innerWidth <= 768) {
+  } else if (window.innerWidth <= 768) {
     drawerWidth.value = '70%' // 中等屏幕时让抽屉宽度更宽
-  }else {
+  } else {
     drawerWidth.value = '40%' // 默认宽度
   }
 }

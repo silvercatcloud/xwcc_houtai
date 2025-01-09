@@ -177,7 +177,7 @@ const onReset = () => {
           <el-option label="草稿" value="草稿"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item style="margin-top: 10px;">
+      <el-form-item style="margin-top: 10px">
         <el-button @click="onSearch" type="primary">搜索</el-button>
         <el-button @click="onReset">重置</el-button>
       </el-form-item>
